@@ -3,8 +3,8 @@ import { createClient } from '@supabase/supabase-js';
 import 'react-native-url-polyfill/auto';
 
 // 🔴 REEMPLAZA CON TUS DATOS DE SUPABASE 🔴
-const supabaseUrl = 'https://tu-proyecto.supabase.co';
-const supabaseAnonKey = 'tu-clave-anon-aqui';
+const supabaseUrl = 'https://fatvluxgbsolvwgbmuaj.supabase.co';
+const supabaseAnonKey = 'sb_publishable_xUaOaOntX775B4dja58pfg_CeWDAxWL';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
