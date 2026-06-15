@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import CitasScreen from '../screens/CitasScreen';
 import MensajesScreen from '../screens/MensajesScreen';
 import PerfilScreen from '../screens/PerfilScreen';
+import RecetasScreen from '../screens/RecetasScreen';
 
 const Stack = createStackNavigator();
 
@@ -36,7 +37,11 @@ export default function AppNavigator() {
         <Stack.Screen 
           name="Home" 
           component={HomeScreen} 
-          options={{ headerLeft: null, title: 'Inicio', headerTitleAlign: 'center' }} 
+          options={{ 
+            title: 'Inicio', 
+            headerTitleAlign: 'center',
+            // headerLeft: null,  // ← COMENTADO - AHORA APARECE EL BOTÓN DE RETROCESO
+          }} 
         />
         
         <Stack.Screen 
@@ -55,6 +60,12 @@ export default function AppNavigator() {
           name="Perfil" 
           component={PerfilScreen} 
           options={{ title: 'Mi Perfil', headerTitleAlign: 'center' }} 
+        />
+
+        <Stack.Screen 
+          name="Recetas" 
+          component={RecetasScreen} 
+          options={{ title: 'Mis Recetas', headerTitleAlign: 'center' }} 
         />
       </Stack.Navigator>
     </NavigationContainer>
