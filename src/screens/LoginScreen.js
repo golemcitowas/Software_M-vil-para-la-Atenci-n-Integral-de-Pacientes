@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { supabase } from '../lib/supabase';
+import * as Sentry from "@sentry/react-native";
 
 export default function LoginScreen({ navigation }) {
   const [dni, setDni] = useState('');
@@ -20,6 +21,11 @@ export default function LoginScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+
+    Sentry.logger.info("Login attempt started");
+
+    Sentry.metrics.count("login_attempts", 1);
+
     if (!dni || !password) {
       Alert.alert('Error', 'Por favor completa todos los campos.');
       return;
@@ -39,6 +45,13 @@ export default function LoginScreen({ navigation }) {
         .single();
 
       if (patientError || !patientData) {
+
+        Sentry.logger.error("Patient DNI not found");
+
+        Sentry.captureException(
+          new Error("DNI no encontrado en pacientes")
+        );
+
         Alert.alert('Error', 'DNI no encontrado. Verifica tus datos.');
         setLoading(false);
         return;
@@ -50,12 +63,33 @@ export default function LoginScreen({ navigation }) {
       });
 
       if (signInError) {
+
+        Sentry.logger.error("Invalid password");
+
+        Sentry.metrics.count(
+          "login_failed",
+          1,
+          {
+            reason: "wrong_password"
+          }
+        );
+
         Alert.alert('Error', 'Contraseña incorrecta. Inténtalo de nuevo.');
       } else {
-        // Login exitoso - navegar al Home
+
+        Sentry.logger.info("Login successful");
+
+        Sentry.metrics.count(
+          "login_success",
+          1
+        );
+
         navigation.replace('Home');
       }
     } catch (e) {
+
+      Sentry.captureException(e);
+
       Alert.alert('Error', 'Ocurrió un error inesperado.');
     } finally {
       setLoading(false);
